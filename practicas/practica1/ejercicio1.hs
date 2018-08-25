@@ -1,22 +1,30 @@
+data Bool = False | Bool
+
 seven x = 7
 
+
+sign :: Integer -> Integer
+
 -- if then else
-sing 0 = 0
-sing x = if x > 0 then 1 else -1
+sign 0 = 0
+sign x = if x > 0 then 1 else -1
 
 -- sin guardas (sin abs)
-sing 0 = 0
-sing x = x / sqrt(x^2)
+sign 0 = 0
+sign x = x / sqrt(x^2)
 
 -- sin guardas
-sing 0 = 0
-sing x = x / abs x -- usar otra por el ejercicio de 'absolute'
+sign 0 = 0
+sign x = x / abs x -- usar otra por el ejercicio de 'absolute'
 
 -- con guardas
-sing x
+sign x
   | x = 0 = 0
   | x > 0 = 1
   | x < 0 = -1
+
+
+absolute :: Integer -> Integer
 
 -- sin guardas
 absolute x
@@ -26,11 +34,16 @@ absolute x
 -- con guardas
 absolute x = if x >= 0 then x else -x
 
--- usando sing
-abolsute x = x * sing x
+-- usando sign
+absolute x = x * sign x
 
 -- sin llamado
-aboslute x = sqrt(x^2)
+absolute x = sqrt(x^2)
+
+and' :: Bool -> Bool -> Bool
+or' :: Bool -> Bool -> Bool
+not' :: Bool -> Bool
+xor' :: Bool -> Bool -> Bool
 
 --and'
 and' x y = if x then y else False
@@ -61,24 +74,24 @@ xor' x y
   | x == y = True
   | x /= y = False
 
--- isZero :: Integer -> Bool
+isZero :: Integer -> Bool
 isZero x = x == 0
 
--- dividesTo :: Integer -> Integer -> Bool
+dividesTo :: Integer -> Integer -> Bool
 dividesTo x y = isZero $ mod y x
 
--- isMultiple :: Integer -> Integer -> Bool
+isMultiple :: Integer -> Integer -> Bool
 isMultiple x y
   | y == 0    = True
   | x > y     = dividesTo y x
   | otherwise = dividesTo x y
 
--- isCommonDivisor :: Integer -> (Integer, Integer) -> Bool
+isCommonDivisor :: Integer -> (Integer, Integer) -> Bool
 isCommonDivisor n (x, y)
   | dividesTo n x = dividesTo n y
   | otherwise     = False
 
--- isCommonMult :: Integer -> (Integer, Integer) -> Bool
+isCommonMult :: Integer -> (Integer, Integer) -> Bool
 isCommonMult x (w,q)
   | isMultiplo x w    = isMultiplo x q
   | otherwise         = False
