@@ -1,4 +1,4 @@
-data Bool = False | Bool
+data Bool = False | True
 
 seven x = 7
 
