@@ -50,3 +50,13 @@ func x y z = y x z
 ```
 
 ## Ejercicio 2
+
+-   _funo_ está currificada.
+
+-   _fdos_ está currificada.
+
+-   _ftres_ no está currificada.
+
+## Ejercicio 3
+
+f_operador## y = y##x
