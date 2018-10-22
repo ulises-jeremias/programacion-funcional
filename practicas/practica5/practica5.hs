@@ -53,3 +53,13 @@ moreThan [] n = []
 moreThan (xs:xss) n = if length xs > n
                         then xs : moreThan xss n
                         else moreThan xss n
+
+listOdds :: [[Int]] -> [Int]
+listOdds [] = []
+listOdds (x:xs) = odds x ++ listOdds xs
+
+odds :: [Int] -> [Int]
+odds [] = []
+odds (x:xs) = if odd x
+                then x : odds xs
+                else odds xs
