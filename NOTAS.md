@@ -19,9 +19,9 @@ map' f (x:xs) = f x : map f xs
 
 filter' :: (a -> Bool) -> [a] -> [a]
 filter' p []     = []
-filter' p (x:xs) = if ( p x ) 
-                    then x : filter p xs
-                    else filter p xs 
+filter' p (x:xs) = if p x 
+                      then x : filter p xs
+                      else filter p xs 
 ```
 
 Luego, dada la definición de `foldr` buscamos definir las funciones utilizando su
