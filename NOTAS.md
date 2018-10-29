@@ -83,3 +83,23 @@ Sin embargo, si vemos lo que realmente significa esto, tenemos una función que 
 map' :: (a -> b) -> [a] -> [b]
 map' f = foldr ((:).f) []
 ```
+
+* * *
+
+## Definiciones
+
+> `foldr` utilizando `recr`
+
+```haskell
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr f z = recr z (\x xs r -> f x r)
+```
+
+> `recr` utilizando `foldr`
+
+```haskell
+recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
+recr z f xs = foldr (\x h ys -> f x (tail ys) (h (tail xs))) z xs xs
+```
+
+**LEER** Algebra of Programming, de R. Pard & O. De Moare.
