@@ -81,16 +81,16 @@ adjacents' xs = recr f [] xs
 remDups [] = []
 remDups (x:xs) = x:remDups (filter (not . (== x )) xs)
 
-primes::Int -> [Int]
+primes :: Int -> [Int]
 primes 0 = []
 primes n = if (isPrime (abs n)) 
             then n:(primes ((abs n) - 1)) 
             else primes ((abs n) - 1)
 
-isPrime:: Int -> Bool
+isPrime :: Int -> Bool
 isPrime n = dividesAny n (n - 1)
 
-dividesAny:: Int -> Int -> Bool
+dividesAny :: Int -> Int -> Bool
 dividesAny 1 n = False
 dividesAny n 1 = True
 dividesAny n s = (not (mod n s == 0)) && (dividesAny n (s - 1))
