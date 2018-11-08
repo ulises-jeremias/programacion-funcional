@@ -42,6 +42,7 @@ chars :: [Char] -> [Char]
 chars = foldr (\x xs -> if isAlpha x then x : xs else xs) []
 
 moreThan :: [[a]] -> Int -> [[a]]
+-- moreThan xss n = foldr (\xs xss -> if length xs > n then xs : xss else xss) [] xss
 moreThan = flip (\n -> foldr (\xs xss -> if length xs > n then xs : xss else xss) [])
 
 ----------------------------------------------------------------
