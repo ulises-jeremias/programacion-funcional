@@ -94,3 +94,8 @@ dividesAny:: Int -> Int -> Bool
 dividesAny 1 n = False
 dividesAny n 1 = True
 dividesAny n s = (not (mod n s == 0)) && (dividesAny n (s - 1))
+
+----------------------------------------------------------------
+
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' c = concat . (map (\x -> if c x then [x] else []))
