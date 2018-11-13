@@ -1,5 +1,6 @@
 import Data.Char (ord, isAlpha)
 
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
 recr f z [] = z
 recr f z (x:xs) = f x xs (recr f z xs)
 
@@ -112,8 +113,8 @@ insert y (x:xs) = if x < y
 insert' :: Ord a => a -> [a] -> [a]
 insert' x [] = [x]
 insert' x z@(y:ys)
-    | x <= y    = x : z
-    | otherwise = y : insert' x ys
+    | x <= y    = x:z
+    | otherwise = y:insert' x ys
 
 insert'' :: Ord a => a -> [a] -> [a]
 insert'' x xs = foldr pom poc xs False
@@ -129,3 +130,18 @@ insertSort a xs = partition (<) ++ [a] ++ partition (>=)
     where 
         partition op = [ x | x <- xs, op x a ]
 
+----------------------------------------------------------------
+
+evenPos :: [a] -> [a]
+evenPos [] = []
+evenPos [x] = [x]
+evenPos (x:y:xs) = x:evenPos xs
+
+-- recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+
+evenPos' :: [a] -> [a]
+evenPos' xs = recr f [] xs
+    where
+        f x xs recXs = if even (length xs)
+                        then x:recXs
+                        else recXs
