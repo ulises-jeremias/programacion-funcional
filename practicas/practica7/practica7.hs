@@ -142,6 +142,6 @@ evenPos (x:y:xs) = x:evenPos xs
 evenPos' :: [a] -> [a]
 evenPos' xs = recr f [] xs
     where
-        f x xs recXs = if even (length xs)
+        f x xs recXs = if even $ length xs
                         then x:recXs
                         else recXs
