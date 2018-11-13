@@ -100,3 +100,32 @@ dividesAny n s = (not (mod n s == 0)) && (dividesAny n (s - 1))
 
 filter' :: (a -> Bool) -> [a] -> [a]
 filter' c = concat . (map (\x -> if c x then [x] else []))
+
+----------------------------------------------------------------
+
+insert :: Ord a => a -> [a] -> [a]
+insert y [] = []
+insert y (x:xs) = if x < y 
+                    then x:insert y xs 
+                    else y:x:xs
+
+insert' :: Ord a => a -> [a] -> [a]
+insert' x [] = [x]
+insert' x z@(y:ys)
+    | x <= y    = x : z
+    | otherwise = y : insert' x ys
+
+insert'' :: Ord a => a -> [a] -> [a]
+insert'' x xs = foldr pom poc xs False
+    where
+        pom y f je
+            | je || x > y = y : f je
+            | otherwise   = x : y : f True
+        poc True = []
+        poc _    = [x]
+
+insertSort :: Ord a => a -> [a] -> [a]
+insertSort a xs = partition (<) ++ [a] ++ partition (>=)
+    where 
+        partition op = [ x | x <- xs, op x a ]
+
