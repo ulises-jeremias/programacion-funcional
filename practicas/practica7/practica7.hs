@@ -4,6 +4,9 @@ recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
 recr f z [] = z
 recr f z (x:xs) = f x xs (recr f z xs)
 
+recr' :: (a -> [a] -> b -> b) -> b -> [a] -> b
+recr' f z xs = foldr (\x h ys -> f x (tail ys) (h (tail ys))) (const z) xs xs
+
 ----------------------------------------------------------------
 
 sum' :: [Int] -> Int
@@ -140,8 +143,9 @@ evenPos (x:y:xs) = x:evenPos xs
 -- recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
 
 evenPos' :: [a] -> [a]
-evenPos' xs = recr f [] xs
+evenPos' xs = recr' f [] xs
     where
         f x xs recXs = if even $ length xs
                         then x:recXs
                         else recXs
+                        

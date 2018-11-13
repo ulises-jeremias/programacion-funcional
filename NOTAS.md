@@ -98,8 +98,8 @@ foldr f z = recr z (\x xs r -> f x r)
 > `recr` utilizando `foldr`
 
 ```haskell
-recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
-recr z f xs = foldr (\x h ys -> f x (tail ys) (h (tail xs))) z xs xs
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+recr f z xs = foldr (\x h ys -> f x (tail ys) (h (tail ys))) (const z) xs xs
 ```
 
 **LEER** Algebra of Programming, de R. Pard & O. De Moare.
