@@ -97,9 +97,66 @@ foldr f z = recr z (\x xs r -> f x r)
 
 > `recr` utilizando `foldr`
 
+Se define `recr` como una función como sigue:
+
+```haskell
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+```
+
+Por inducción en la estructura de la lista:
+
+```haskell
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+recr f z [] = z
+recr f z (x:xs) = f x xs (recr f z xs)
+```
+
+Ahí podemos ver que la función `f` se aplica sobre el elemento actual de la recursión `x`,
+y la cola de la lista `xs`,
+
+```haskell
+foldr :: (a-> b -> b) -> b -> [a] -> b
+
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+```
+
+Mirando los tipos correspondientes, podemos ver que para definir `recr` con `foldr`
+se necesita utilizar la estructura de la lista para la definición de la función del
+fold, dado que se necesita la cola de la lista, por lo que el foldr deberá retornar
+un tipo que vaya de `[a] -> b`, entonces el caso base de la recursión
+no será un elemento de `a`, sino una función que `forall a b. a -> b -> a`,
+es decir, una función de la forma `\c -> z`, o `const z`.
+
+Luego, dada la función que se envía como parámetro al `foldr` para esto,
+tenemos que el primer parámetro será un `x :: a`, el segundo será una función
+`h :: [a] -> b` dado que la misma se aplicaría sobre la cola de la recursión.
+Y finalmente, la estructura sobre la cual trabajar.
+
+```haskell
+:: a -> ([a] -> b) -> [a] -> ([a] -> b)
+```
+
+Esto nos va quedando algo así
+
+```haskell
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+recr f z xs = foldr ? (const z) xs xs
+```
+
+Y dada la siguiente definición,
+
+```haskell
+:: a -> ([a] -> b) -> [a] -> ([a] -> b)
+\x h ys -> f x (tail ys) (h (tail ys))
+```
+
+Quedando como sigue,
+
 ```haskell
 recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
 recr f z xs = foldr (\x h ys -> f x (tail ys) (h (tail ys))) (const z) xs xs
 ```
+
+* * *
 
 **LEER** Algebra of Programming, de R. Pard & O. De Moare.

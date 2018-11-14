@@ -4,6 +4,7 @@ recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
 recr f z [] = z
 recr f z (x:xs) = f x xs (recr f z xs)
 
+-- Ver explicación en NOTAS.md
 recr' :: (a -> [a] -> b -> b) -> b -> [a] -> b
 recr' f z xs = foldr (\x h ys -> f x (tail ys) (h (tail ys))) (const z) xs xs
 
@@ -128,6 +129,8 @@ insert'' x xs = foldr pom poc xs False
         poc True = []
         poc _    = [x]
 
+insert''' x = recr' (\y ys zs -> if x < y then x:y:ys else y:zs) [x]
+
 insertSort :: Ord a => a -> [a] -> [a]
 insertSort a xs = partition (<) ++ [a] ++ partition (>=)
     where 
@@ -148,4 +151,3 @@ evenPos' xs = recr' f [] xs
         f x xs recXs = if even $ length xs
                         then x:recXs
                         else recXs
-                        
