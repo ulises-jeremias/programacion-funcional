@@ -53,7 +53,7 @@ and' x y
   | x         = y
   | otherwise = False
 
-or' x y = if x the True else y
+or' x y = if x then True else y
 
 -- con guardas
 or' x y
