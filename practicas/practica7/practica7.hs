@@ -24,7 +24,8 @@ codes :: [Char] -> [Int]
 codes = foldr ((:) . ord) []
 
 remainders :: [Int] -> Int -> [Int]
-remainders = flip (\r -> foldr ((:) . \x -> (x `mod` r)) [])
+-- remainders = flip (\r -> foldr ((:) . \x -> (x `mod` r)) [])
+remainders = flip (\r -> foldr ((:).(flip mod) r) [])
 
 squares :: [Int] -> [Int]
 -- squares = map (^2)
