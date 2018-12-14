@@ -224,8 +224,13 @@ sum (x:xs) ≤ len (x:xs) * maxl (x:xs)
 
 x + sum xs ≤ (1 + len xs) * (x `max` maxl xs) -- def. sum.2, len.2, maxl.2
 
--- posibilidad 1
-x + sum xs ≤ (1 + len xs) * (x `max` maxl xs)
+sum x:xs = x + sum xs -- def sum
+	 ≤ x + len xs * maxl xs -- por h.i.
+	 ≤ maxl (x:xs) + len xs * maxl xs -- pues x ≤ maxl x:xs para todo xs
+	 ≤ maxl (x:xs) + len xs * maxl (x:xs) -- pues maxl xs ≤ maxl x:xs por def de maxl
+	 ≤ (1 + len xs) * maxl (x:xs)
+	 ≤ len (x:xs) * maxl (x:xs) -- por definicion de len
+	 
 ```
 
 ## Ejercicio 9
