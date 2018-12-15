@@ -28,7 +28,7 @@ leaves = foldTipTree (const 1) (+)
 -- nodes (Join t1 t2) = 1 + nodes t1 + nodes t2
 
 nodes :: TipTree a -> Int
-nodes = foldTipTree (const 0) (\t1 t2 -> 1 + t1 + t2)
+nodes = foldTipTree (const 0) ((+) . (+1))
 
 -- walkover, que devuelve la lista de las hojas de un  árbol, leídas de izquierda a derecha.
 -- walkover :: TipTree a -> [a]
@@ -55,3 +55,83 @@ mirrorTip = foldTipTree Tip (flip Join)
 
 mapTip :: (a -> b) -> TipTree a -> TipTree b
 mapTip f = foldTipTree (Tip . f) Join
+
+
+
+data BinTree a = Empty | Bin a (BinTree a) (BinTree a) deriving Show
+
+bT1 = Empty
+bT2 = Bin 1 (Bin 2 Empty (Bin 3 Empty Empty)) Empty
+bT3 = Bin 1 Empty Empty
+
+nodesBin :: BinTree a -> Int
+nodesBin Empty = 0
+nodesBin (Bin _ t1 t2) = 1 + nodesBin t1 + nodesBin t2
+
+heightBin :: BinTree a -> Int
+heightBin Empty = 1
+heightBin (Bin _ t1 t2) = 1 + max (heightBin t1) (heightBin t2)
+
+mapBin :: (a -> b) -> BinTree a -> BinTree b
+mapBin _ Empty = Empty
+mapBin f (Bin a t1 t2) = Bin (f a) (mapBin f t1) (mapBin f t2)
+
+mirrorBin :: BinTree a -> BinTree a
+mirrorBin Empty = Empty
+mirrorBin (Bin a t1 t2) = Bin a (mirrorBin t2) (mirrorBin t1)
+
+foldBin :: (a -> b -> b -> b) -> b -> BinTree a -> b
+foldBin _ z Empty = z
+foldBin f z (Bin a t1 t2) = f a (foldBin f z t1) (foldBin f z t2)
+
+{- -}
+
+nodesBin' :: BinTree a -> Int
+nodesBin' = foldBin (\x t1 t2 -> 1 + t1 + t2) 0
+
+heightBin' :: BinTree a -> Int
+heightBin' = foldBin (\x t1 t2 -> 1 + max t1 t2) 0
+
+mapBin' :: (a -> b) -> BinTree a -> BinTree b
+mapBin' f = foldBin (Bin . f) Empty
+
+mirrorBin' :: BinTree a -> BinTree a
+mirrorBin' = foldBin (flip . Bin) Empty
+
+{- -}
+
+data GenTree a = Gen a [GenTree a]
+
+foldGen :: (a -> [b] -> b) -> GenTree a -> b
+foldGen f (Gen x ts) = f x (map (foldGen f) ts)
+
+foldGen' :: (a -> c -> b) -> ([b] -> c) -> GenTree a -> b
+foldGen' f g (Gen x ts) = f x (g (map (foldGen' f g) ts))
+
+foldGen'' :: (a -> c -> b) -> ([b] -> c) -> GenTree a -> b
+foldGen'' f g = foldGen (\a bs -> f a (g bs))
+
+{- -}
+
+mapGen :: (a -> b) -> GenTree a -> GenTree b
+mapGen f = foldGen (Gen . f)
+
+mapGen' :: (a -> b) -> GenTree a -> GenTree b
+mapGen' f = foldGen' (Gen . f) id
+
+-- maximum with Empty list case
+maximum' :: [Int] -> Int
+maximum' [] = 0
+maximum' xs = maximum xs
+
+heightGen :: GenTree a -> Int
+heightGen = foldGen (\_ ts -> 1 + maximum' ts)
+
+heightGen' :: GenTree a -> Int
+heightGen' = foldGen' (const (+1)) maximum'
+
+mirrorGen :: GenTree a -> GenTree a
+mirrorGen = foldGen (\x ts -> Gen x (reverse ts))
+
+mirrorGen' :: GenTree a -> GenTree a
+mirrorGen' = foldGen' Gen reverse
