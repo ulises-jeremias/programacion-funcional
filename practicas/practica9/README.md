@@ -1,5 +1,73 @@
 # Practica 9
 
+## Ejercicio 2
+
+> Dado el tipo `data BinTree a = Empty | Bin a (BinTree a) (BinTree a)`
+
+Dadas las siguientes funciones definidas por inducción en la estructura de `BinTree`,
+
+```haskell
+mapBin :: (a -> b) -> BinTree a -> BinTree b
+mapBin _ Empty = Empty
+mapBin f (Bin a t1 t2) = Bin (f a) (mapBin f t1) (mapBin f t2)
+
+mirrorBin :: BinTree a -> BinTree a
+mirrorBin Empty = Empty
+mirrorBin (Bin a t1 t2) = Bin a (mirrorBin t2) (mirrorBin t1)
+
+foldBin :: (a -> b -> b -> b) -> b -> BinTree a -> b
+foldBin _ z Empty = z
+foldBin f z (Bin a t1 t2) = f a (foldBin f z t1) (foldBin f z t2)
+
+mapBin' :: (a -> b) -> BinTree a -> BinTree b
+mapBin' f = foldBin (Bin . f) Empty
+
+mirrorBin' :: BinTree a -> BinTree a
+mirrorBin' = foldBin (flip . Bin) Empty
+```
+
+Se demuestran las siguientes equivalencias
+
+-   `mapBin' = mapBin`,
+
+Se demuestra mediante método de inducción en la estructura del Arbol Binario t.
+
+**Caso base. t = Empty**
+
+```
+mapBin' f t = mapBin f Empty
+=   {por def. de mapBin'}
+foldBin (Bin . f) Empty Empty
+=   {por def. de foldBin}
+Empty
+=   {por def. de mapBin}
+mapBin f Empty
+```
+
+**Caso inductivo. t = (Bin x t1 t2)**
+
+Si `mapBin' f t1 = mapBin f t1` y `mapBin' f t2 = mapBin f t2`
+
+entonces `mapBin' f (Bin x t1 t2) = mapBin f (Bin x t1 t2)`
+
+```
+mapBin' f t = mapBin' f (Bin x t1 t2)
+=   {por def. de mapBin'}
+foldBin (Bin . f) Empty (Bin x t1 t2)
+=   {por def. de foldBin}
+(Bin . f) x (foldBin (Bin . f) Empty t1) (foldBin (Bin . f) Empty t2)
+=   {por def. de mapBin'}
+(Bin . f) x (mapBin' f t1) (mapBin' f t2)
+=   {por hipotesis inductiva}
+(Bin . f) x (mapBin f t1) (mapBin f t2)
+=   {por def. de mapBin}
+mapBin f (Bin x t1 t2)
+```
+
+-   `mirrorBin' = mirrorBin`
+
+
+
 ## Ejercicio 7
 
 > Demostrar que para todo arbol binario t , de tipo `BinTree a` se cumple `nodesBin t <= 2^(heightBin t) - 1`
@@ -30,7 +98,7 @@ nodesBin t = nodesBin Empty
 
 Para este caso evaluamos que, sea t = (Bin x t1 t2),
 
-Si `nodesBin t1 <= 2^(heightBin t1) - 1` && `nodesBin t2 <= 2^(heightBin t2) - 1`
+Si `nodesBin t1 <= 2^(heightBin t1) - 1` y `nodesBin t2 <= 2^(heightBin t2) - 1`
 
 entonces `nodesBin t <= 2^(heightBin t) - 1`
 
