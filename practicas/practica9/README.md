@@ -66,7 +66,86 @@ mapBin f (Bin x t1 t2)
 
 -   `mirrorBin' = mirrorBin`
 
+Se demuestra mediante método de inducción en la estructura del Arbol Binario t.
 
+**Caso base. t = Empty**
+
+```
+mirrorBin' t = mirrorBin' Empty
+=   {por def. de mirrorBin'}
+foldBin (flip . Bin) Empty Empty
+=   {por def. de foldBin}
+Empty
+=   {por def. de mirrorBin}
+mirrorBin Empty
+```
+
+**Caso inductivo. t = (Bin x t1 t2)**
+
+Si `mirrorBin' t1 = mirrorBin t1` y `mirrorBin' t2 = mirrorBin t2`
+
+entonces `mirrorBin' (Bin x t1 t2) = mirrorBin (Bin x t1 t2)`
+
+```
+mirrorBin' t = mirrorBin' (Bin x t1 t2)
+=   {por def. de mirrorBin'}
+foldBin (flip . Bin) Empty (Bin x t1 t2)
+=   {por def. de foldBin}
+(flip . Bin) x (foldBin (flip . Bin) Empty t2) (foldBin (flip . Bin) Empty t1)
+=   {por def. de mirrorBin'}
+(flip . Bin) x (mirrorBin' t2) (mirrorBin' t1)
+=   {por hipotesis inductiva}
+(flip . Bin) x (mirrorBin t2) (mirrorBin t1)
+=   {por def. de mirrorBin}
+mirrorBin (Bin x t1 t2)
+```
+
+-   `mirrorBin . mirrorBin = idBin`
+
+Sea `idBin` como sigue,
+
+```haskell
+idBin :: BinTree a -> BinTree a
+idBin bt = bt
+```
+
+**Caso base. t = Empty**
+
+```
+(mirrorBin . mirrorBin) t = (mirrorBin . mirrorBin) Empty
+=   {por def. de .}
+mirrorBin (mirrorBin Empty)
+=   {por def. de mirrorBin}
+mirrorBin Empty
+=   {por def. de mirrorBin}
+Empty
+=   {por def. de idBin}
+idBin Empty
+```
+
+**Caso inductivo. t = (Bin x t1 t2)**
+
+Si `(mirrorBin . mirrorBin) t1 = idBin t1` y `(mirrorBin . mirrorBin) t2 = idBin t2`
+
+entonces `(mirrorBin . mirrorBin) (Bin x t1 t2) = idBin (Bin x t1 t2)`
+
+```
+(mirrorBin . mirrorBin) t = (mirrorBin . mirrorBin) (Bin x t1 t2)
+=   {por def. de .}
+mirrorBin (mirrorBin (Bin x t1 t2))
+=   {por def. de mirrorBin}
+mirrorBin (Bin x (mirrorBin t2) (mirrorBin t1))
+=   {por def. de mirrorBin}
+Bin x (mirrorBin (mirrorBin t1)) (mirrorBin (mirrorBin t2))
+=   {por def. de .}
+Bin x ((mirrorBin . mirrorBin) t1) ((mirrorBin . mirrorBin) t2)
+=   {por hipotesis inductiva}
+Bin x (idBin t1) (idBin t2)
+=   {por def. de idBin}
+Bin x t1 t2
+=   {por def. de idBin}
+idBin (Bin x t1 t2)
+```
 
 ## Ejercicio 7
 
