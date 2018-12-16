@@ -154,7 +154,8 @@ Quedando como sigue,
 
 ```haskell
 recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
-recr f z xs = foldr (\x h ys -> f x (tail ys) (h (tail ys))) (const z) xs xs
+-- recr f z xs = foldr (\x h ys -> f x (tail ys) (h (tail ys))) (const z) xs xs
+recr f z xs = foldr (\x h (_:ys) -> f x ys (h ys)) (const z) xs xs
 ```
 
 * * *

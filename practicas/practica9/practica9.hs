@@ -109,7 +109,7 @@ foldGen' :: (a -> c -> b) -> ([b] -> c) -> GenTree a -> b
 foldGen' f g (Gen x ts) = f x (g (map (foldGen' f g) ts))
 
 foldGen'' :: (a -> c -> b) -> ([b] -> c) -> GenTree a -> b
-foldGen'' f g = foldGen (\a bs -> f a (g bs))
+foldGen'' f g = foldGen (\a ts -> f a (g ts))
 
 {- -}
 
@@ -125,7 +125,8 @@ maximum' [] = 0
 maximum' xs = maximum xs
 
 heightGen :: GenTree a -> Int
-heightGen = foldGen (\_ ts -> 1 + maximum' ts)
+-- heightGen = foldGen (\_ ts -> 1 + maximum' ts)
+heightGen = foldGen (const ((+1) . maximum'))
 
 heightGen' :: GenTree a -> Int
 heightGen' = foldGen' (const (+1)) maximum'
