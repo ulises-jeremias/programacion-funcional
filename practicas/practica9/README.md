@@ -10,9 +10,9 @@ Se demuestra mediante método de inducción en la estructura del Arbol Binario t
 
 **Para esto se toma el siguiente caso base:**
 
-```
 Si t = Empty,
 
+```
 nodesBin t = nodesBin Empty
 =   {por definicion de nodesBin}
 0
@@ -29,7 +29,9 @@ nodesBin t = nodesBin Empty
 **Ahora evaluamos el caso inductivo**
 
 Para este caso evaluamos que, sea t = (Bin x t1 t2),
+
 Si `nodesBin t1 <= 2^(heightBin t1) - 1` && `nodesBin t2 <= 2^(heightBin t2) - 1`
+
 entonces `nodesBin t <= 2^(heightBin t) - 1`
 
 
