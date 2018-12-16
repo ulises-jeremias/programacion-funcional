@@ -135,3 +135,31 @@ mirrorGen = foldGen (\x ts -> Gen x (reverse ts))
 
 mirrorGen' :: GenTree a -> GenTree a
 mirrorGen' = foldGen' Gen reverse
+
+{- -}
+
+data GenExp a = Leaf a | Un (GenExp a) | BinG (GenExp a) (GenExp a) deriving Show
+
+foldGenExp :: (a -> b) -> (b -> b) -> (b -> b -> b) -> GenExp a -> b
+foldGenExp f _ _ (Leaf a) = f a
+foldGenExp f g h (Un ge) = g (foldGenExp f g h ge)
+foldGenExp f g h (BinG ge1 ge2) = h (foldGenExp f g h ge1) (foldGenExp f g h ge2)
+
+data NExp = Num Int | Sum NExp NExp | Sub NExp NExp | Neg NExp deriving Show
+
+foldNExp :: (Int -> a) -> (a -> a -> a) -> (a -> a -> a) -> (a -> a) -> NExp -> a
+foldNExp f _ _ _ (Num x) = f x
+foldNExp f g h l (Sum ne1 ne2) = g (foldNExp f g h l ne1) (foldNExp f g h l ne2)
+foldNExp f g h l (Sub ne1 ne2) = g (foldNExp f g h l ne1) (foldNExp f g h l ne2)
+foldNExp f g h l (Neg ne) = l (foldNExp f g h l ne)
+
+data Nat = Zero | Succ Nat deriving Show
+
+foldNat :: (a -> a) -> a -> Nat -> a
+foldNat _ z Zero = z
+foldNat f z (Succ n) = f (foldNat f z n)
+
+zero = Zero
+one = Succ (Zero)
+seven = Succ (Succ (Succ (Succ (Succ (Succ (Succ (Zero)))))))
+
